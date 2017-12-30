@@ -15,3 +15,16 @@
     <button type="button" class="btn btn-primary" (click)="open = false">Ok</button>
   </div>
 </clr-modal>
+
+<div>
+  <button class="btn btn-primary" (click)="updateDadJoke()" [disabled]="loading">Get Dad Joke</button> 
+  <span class="spinner spinner-sm" *ngIf="loading">
+      Loading...
+  </span>
+  <pre *ngIf="dadJoke">
+    <code>
+      {{ dadJoke.joke }}
+      
+      URL: https://icanhazdadjoke.com/j/{{ dadJoke.id }}</code>
+  </pre>
+</div>

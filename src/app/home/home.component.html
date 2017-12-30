@@ -3,7 +3,7 @@
   ~ This software is released under MIT license.
   ~ The full license information can be found in LICENSE in the root directory of this project.
   -->
-<p>This is a Clarity seed application. This is the default page that loads for the application.</p>
+<!-- <p>This is a Clarity seed application. This is the default page that loads for the application.</p>
 
 <clr-dropdown>
     <button clrDropdownTrigger class="btn">
@@ -17,4 +17,119 @@
         <a clrDropdownItem href="javascript://">Link 1</a>
         <a clrDropdownItem href="javascript://">Link 2</a>
     </clr-dropdown-menu>
-</clr-dropdown>
+</clr-dropdown> -->
+
+
+<clr-alert *ngIf="errorMessage" [clrAlertType]="'alert-warning'">
+    <div clr-alert-item class="alert-item">
+        <span class="alert-text">
+            {{ errorMessage }}
+        </span>
+    </div>
+</clr-alert>
+<clr-alert *ngIf="successMessage" [clrAlertType]="'alert-success'">
+    <div clr-alert-item class="alert-item">
+        <span class="alert-text">
+            {{ successMessage }}
+        </span>
+    </div>
+</clr-alert>
+
+<div class="row">
+    <form class="form compact col-md-6" [formGroup]="addItemForm" (ngSubmit)="addItem()">
+        <section class="form-block">
+            <label>Add Item</label>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <label for="date" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-sm"
+                    [class.invalid]="addItemForm.get('date').invalid && (addItemForm.get('date').dirty || addItemForm.get('date').touched)">
+                    <input id="date" type="datetime-local" formControlName="date">
+                    <span class="tooltip-content">
+                        Date is required.
+                    </span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="type">Type</label>
+                <label for="date" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-sm"
+                    [class.invalid]="addItemForm.get('type').invalid && (addItemForm.get('type').dirty || addItemForm.get('type').touched)">
+                    <input id="type" type="text" formControlName="type">
+                    <span class="tooltip-content">
+                        Type is required.
+                    </span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <label for="date" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-sm"
+                    [class.invalid]="addItemForm.get('location').invalid && (addItemForm.get('location').dirty || addItemForm.get('location').touched)">
+                    <input id="location" type="text" formControlName="location">
+                    <span class="tooltip-content">
+                        Location is required.
+                    </span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="item">Item</label>
+                <label for="date" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-sm"
+                    [class.invalid]="addItemForm.get('item').invalid && (addItemForm.get('item').dirty || addItemForm.get('item').touched)">
+                    <input id="item" type="text" formControlName="item">
+                    <span class="tooltip-content">
+                        Item is required.
+                    </span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <label for="date" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-sm"
+                    [class.invalid]="addItemForm.get('price').invalid && (addItemForm.get('price').dirty || addItemForm.get('price').touched)">
+                    <input id="price" type="number" formControlName="price">
+                    <span class="tooltip-content">
+                        Price is required.
+                    </span>
+                </label>
+            </div>
+            <button class="btn btn-primary"
+                type="submit"
+                [disabled]="addItemForm.invalid">Add</button>
+        </section>
+    </form>
+    
+    <form class="form compact col-sm-6">
+        <section class="form-block">
+            <label>Monthly Budget</label>
+            <div class="form-group">
+                <label for="monthlyAmount">Amount</label>
+                <input name="monthlyAmount" type="number" id="monthlyAmount" placeholder="Amount" [(ngModel)]='ls.monthlyAmount'>
+            </div>
+            <div>
+                <h5>Expense This Month</h5>
+                <div class="progress labeled" [class.warning]="getExpensePercentage() > 90">
+                    <progress max="100" [value]="getExpensePercentage()" [attr.data-displayval]="getExpensePercentage() + '%'"></progress>
+                    <span>{{ getExpensePercentage() + '%' }}</span>
+                </div>  
+            </div>
+        </section>
+    </form>
+</div>
+
+<clr-datagrid>
+    <clr-dg-column [clrDgField]="'date'">Date</clr-dg-column>
+    <clr-dg-column [clrDgField]="'type'">Type</clr-dg-column>
+    <clr-dg-column [clrDgField]="'location'">Location</clr-dg-column>
+    <clr-dg-column [clrDgField]="'item'">Item</clr-dg-column>
+    <clr-dg-column [clrDgField]="'price'">Price</clr-dg-column>
+
+    <clr-dg-row *clrDgItems="let item of items; let i=index">
+        <clr-dg-cell>{{ item.date | date:'short' }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.type }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.location }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.item }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.price | currency }}</clr-dg-cell>
+        <clr-dg-action-overflow>
+            <button class="action-item" (click)="deleteItem(i)">Delete</button>
+        </clr-dg-action-overflow>
+    </clr-dg-row>
+
+    <clr-dg-footer>{{ items.length }} records | Total: {{ getTotalCost() | currency }}</clr-dg-footer>
+</clr-datagrid>
